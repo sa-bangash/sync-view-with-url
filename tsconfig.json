@@ -16,6 +16,12 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "es2020",
+    "paths": {
+      "sync-view-with-url": [
+        "dist/sync-view-with-url/sync-view-with-url",
+        "dist/sync-view-with-url"
+      ]
+    },
     "lib": [
       "es2018",
       "dom"

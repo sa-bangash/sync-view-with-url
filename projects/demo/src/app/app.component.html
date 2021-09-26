@@ -1,0 +1,26 @@
+<div
+  style="
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+  "
+>
+  name :
+  <input
+    type="text"
+    name="name"
+    [ngModel]="name"
+    (ngModelChange)="onNameChange($event)"
+  />
+  {{ name }}
+
+  Level :
+  <input
+    type="text"
+    name="level"
+    [ngModel]="level"
+    (ngModelChange)="onLevelChange($event)"
+  />
+  {{ level }}
+</div>
