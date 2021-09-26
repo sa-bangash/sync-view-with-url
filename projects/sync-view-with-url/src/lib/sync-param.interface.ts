@@ -1,5 +1,4 @@
-export interface SyncParamControlConfig<T = any> {
-  val: T;
+export interface SyncParamControlConfig {
   serialize?: (v: any) => any;
   deserialize?: (v: any) => any;
 }

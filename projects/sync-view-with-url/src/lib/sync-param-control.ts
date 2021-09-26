@@ -3,7 +3,7 @@ import { map } from 'rxjs/operators';
 import { SyncParamControlConfig } from './sync-param.interface';
 
 export class SyncParamControl<T = any> {
-  private valueSource: BehaviorSubject<T>;
+  private valueSource: BehaviorSubject<any>;
   public value$: Observable<T>;
 
   public serializeValue$: Observable<T>;
@@ -12,13 +12,13 @@ export class SyncParamControl<T = any> {
   serialize = (v: any) => v;
   deserialize = (v: any) => v;
 
-  constructor({ val, serialize, deserialize }: SyncParamControlConfig<T>) {
-    this.valueSource = new BehaviorSubject<T>(val);
-    if (serialize) {
-      this.serialize = serialize;
+  constructor(config?: SyncParamControlConfig) {
+    this.valueSource = new BehaviorSubject<any>(null);
+    if (config?.serialize) {
+      this.serialize = config.serialize;
     }
-    if (deserialize) {
-      this.deserialize = deserialize;
+    if (config?.deserialize) {
+      this.deserialize = config.deserialize;
     }
     this.value$ = this.valueSource.asObservable();
     this.serializeValue$ = this.value$.pipe(map((val) => this.serialize(val)));

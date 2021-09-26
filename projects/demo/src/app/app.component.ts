@@ -4,7 +4,6 @@ import { takeUntil } from 'rxjs/operators';
 import {
   SyncParamControl,
   SyncParamControlsManager,
-  SyncViewWithUrlService,
   SyncParamBuilder,
 } from 'sync-view-with-url';
 
@@ -20,7 +19,6 @@ export class AppComponent implements OnDestroy {
   syncManagers: SyncParamControlsManager;
   constructor(private qpBuilder: SyncParamBuilder) {
     this.syncManagers = this.getManager();
-    // console.log(this.syncManagers.getValue());
     this.inilizeFormValue();
   }
   inilizeFormValue() {
@@ -38,17 +36,20 @@ export class AppComponent implements OnDestroy {
     return this.qpBuilder.build({
       controls: {
         name: new SyncParamControl({
-          val: 'dd',
           serialize: (val) => {
-            return `${val}-sometext`;
+            if (val) {
+              return `${val}-sometext`;
+            }
+            return null;
           },
           deserialize: (val: string) => {
-            return val.split('-')[0];
+            if (val) {
+              return val.split('-')[0];
+            }
+            return null;
           },
         }),
-        level: new SyncParamControl({
-          val: 'hello',
-        }),
+        level: new SyncParamControl(),
       },
     });
   }

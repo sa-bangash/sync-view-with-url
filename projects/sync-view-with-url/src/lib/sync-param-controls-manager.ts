@@ -5,7 +5,15 @@ import {
   Router,
 } from '@angular/router';
 import { merge, Observable, Subject } from 'rxjs';
-import { auditTime, filter, map, takeUntil, tap } from 'rxjs/operators';
+import {
+  auditTime,
+  debounceTime,
+  filter,
+  map,
+  skip,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
 import { SyncParamControl } from './sync-param-control';
 import { ParamControlsManagerConfig } from './sync-param-controls-manager.interface';
 
@@ -38,6 +46,7 @@ export class SyncParamControlsManager {
         })
       )
       .subscribe((event) => {
+        console.log('router-event called');
         const param = this.route.snapshot.queryParams;
         this.updateControls(param);
       });
@@ -66,6 +75,7 @@ export class SyncParamControlsManager {
         auditTime(0)
       )
       .subscribe(() => {
+        console.log('watch called');
         this.updateUrl(buffer);
         buffer = {};
       });
@@ -94,6 +104,7 @@ export class SyncParamControlsManager {
   get deserialize$(): Observable<Record<string, any>> {
     const controls = Object.keys(this.controls).map((key) =>
       this.controls[key].deserializeValue$.pipe(
+        skip(1),
         map((resp) => {
           return {
             [key]: resp,
@@ -101,11 +112,11 @@ export class SyncParamControlsManager {
         })
       )
     );
-    let buffer: Record<string, any> = {};
     return merge(...controls).pipe(
-      map((resp: Record<string, any>) => {
+      map((resp) => {
         return this.getDeserializeValue();
-      })
+      }),
+      auditTime(0)
     );
   }
   get(key: string): SyncParamControl<any> {
